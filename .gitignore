@@ -62,4 +62,5 @@ fabric.properties
 
 # intellij maven
 *.ipr
+*.iml
 
