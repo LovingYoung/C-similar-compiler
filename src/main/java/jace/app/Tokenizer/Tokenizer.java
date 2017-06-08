@@ -199,8 +199,13 @@ public class Tokenizer {
         } else if(type == Token.Type.CHARACTER) {
             token.setType(Token.Type.IDENTIFIER);
             tokens.add(token);
+        }else if(type == Token.Type.DIGIT){
+            token.setType(Token.Type.VALUE);
+            tokens.add(token);
         } else{
             tokens.add(token);
         }
     }
+
+    //TODO: Mabye implemented with a more clever way
 }
