@@ -11,12 +11,15 @@ import java.util.List;
  */
 public class SyntacticAnalyze {
     /**
-     * Store the root of the parse tree
+     * Store generated tokens
      */
-    private static ParseTreeNode root;
-
     private static List<Token> tokens;
 
+    /**
+     * The function to do syntactic analysis
+     * @param code the code to be analyzed
+     * @return the whole parse tree
+     */
     public static ParseTreeNode analyze(String code){
         tokens = new Tokenizer(code).tokenize();
         ParseTreeNode root = new ParseTreeNode("", "");
@@ -30,6 +33,9 @@ public class SyntacticAnalyze {
         return root;
     }
 
+    /**
+     * &lt;Program&gt; ::= &lt;DeclarativeChain&gt;
+     */
     private static class Program{
         public static Token[] getFirst(){
             return DeclarativeChain.getFirst();
@@ -41,6 +47,10 @@ public class SyntacticAnalyze {
             return root;
         }
     }
+
+    /**
+     * &lt;Declarative&gt; ::= int &lt;Id&gt; &lt;DeclarativeType&gt; | void &lt;Id&gt; &lt;FunctionDeclarative&gt;
+     */
     private static class Declarative {
         public static Token[] getFisrt() {
             Token[] tokens = new Token[]{new Token("int", Token.Type.KEYWORD), new Token("void", Token.Type.KEYWORD)};
@@ -66,6 +76,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;DeclarativeChain&gt; ::= &lt;Declarative&gt; {&lt;Declarative&gt;}
+     */
     private static class DeclarativeChain {
         public static Token[] getFirst() {
             return Declarative.getFisrt();
@@ -78,6 +91,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Id&gt; ::= IDENTIFIER
+     */
     private static class Id {
         public static Token[] getFirst(){
             return new Token[]{new Token("", Token.Type.IDENTIFIER)};
@@ -94,6 +110,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;DeclarativeType&gt; ::= &lt;VariablesDeclarative&gt; | &lt;FunctionDeclarative&gt;
+     */
     private static class DeclarativeType {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("DeclarativeType", "");
@@ -108,6 +127,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;VariableDeclarative&gt; ::= ;
+     */
     private static class VariablesDeclarative {
         public static Token[] getFirst() {
             return new Token[]{new Token(";", Token.Type.FIELD_OP)};
@@ -126,6 +148,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;FunctionDeclarative&gt; ::= '(' &lt;FormalParamter&gt; ')' &lt;StatementBlock&gt;
+     */
     private static class FunctionDeclarative {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("FunctionDeclarative", "");
@@ -149,6 +174,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;FormalParameter&gt; ::= &lt;ParameterList&gt; | void
+     */
     private static class FormalParameter {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("FormalParameter", "");
@@ -163,6 +191,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;ParameterList&gt; ::= &lt;Parameter&gt; {, &lt;Parameter&gt;}
+     */
     private static class ParameterList {
         public static Token[] getFirst() {
             return Parameter.getFirst();
@@ -181,6 +212,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Parameter&gt; ::= int &lt;Id&gt;
+     */
     private static class Parameter {
         public static Token[] getFirst() {
             return new Token[]{new Token("int", Token.Type.KEYWORD)};
@@ -200,6 +234,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;StatementBlocks&gt; ::= '{' &lt;InnerDeclarative&gt; &lt;StatementChain&gt; '}'
+     */
     private static class StatementBlocks {
         public static Token[] getFirst(){
             return new Token[]{new Token("{", Token.Type.LEFT_BRACE)};
@@ -222,6 +259,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;InnerDeclarative ::= EMPTY | {&lt;InnerVariableDeclarative&gt; ;}
+     */
     private static class InnerDeclarative {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("InnerDeclarative", "");
@@ -236,17 +276,9 @@ public class SyntacticAnalyze {
         }
     }
 
-    private static class StatementChain {
-        public static ParseTreeNode process() throws ParseException {
-            ParseTreeNode root = new ParseTreeNode("InnerVariableDeclaractive", "");
-            root.addChild(Statement.process());
-            while(Arrays.asList(Statement.getFirst()).contains(tokens.get(0))){
-                root.addChild(Statement.process());
-            }
-            return root;
-        }
-    }
-
+    /**
+     * &lt;InnerVariableDeclarative ::= int &lt;Id&gt;
+     */
     private static class InnerVariableDeclarative {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("InnerVariableDeclaractive", "");
@@ -263,6 +295,23 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;StatementChain&gt; ::= {&lt;Statement&gt;}
+     */
+    private static class StatementChain {
+        public static ParseTreeNode process() throws ParseException {
+            ParseTreeNode root = new ParseTreeNode("StatementChain", "");
+            root.addChild(Statement.process());
+            while(Arrays.asList(Statement.getFirst()).contains(tokens.get(0))){
+                root.addChild(Statement.process());
+            }
+            return root;
+        }
+    }
+
+    /**
+     * &lt;Statement&gt; ::= &lt;IfStatement&gt; | &lt;WhileStatement&gt; | &lt;ReturnStatement&gt; | &lt;AssignmentStatement&gt;
+     */
     private static class Statement {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("Statement", "");
@@ -287,6 +336,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;IfStatement&gt; ::= if '(' &lt;Expression&gt; ')' &lt;StatementBlock&gt; [ else &lt;StatementBlock&gt; ]
+     */
     private static class IfStatement {
         public static Token[] getFirst() {
             return new Token[]{new Token("if", Token.Type.KEYWORD)};
@@ -317,6 +369,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;ReturnStatement&gt; ::= return [ &lt;Expression&gt; ] ;
+     */
     private static class ReturnStatement {
         public static Token[] getFIrst() {
             return new Token[]{new Token("return", Token.Type.KEYWORD)};
@@ -339,6 +394,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;WhileStatement&gt; ::= while '(' &lt;Expression&gt; ')' &lt;StatementBlock&gt;
+     */
     private static class WhileStatement {
         public static Token[] getFirst() {
             return new Token[]{new Token("while", Token.Type.KEYWORD)};
@@ -364,6 +422,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;AssignmentStatement&gt; ::= &lt;Id&gt;=&lt;Expression&gt;
+     */
     private static class AssignmentStatement {
         public static Token[] getFirst() {
             return Id.getFirst();
@@ -385,6 +446,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Expression&gt; ::= &lt;PlusExpression&gt; {&lt;Relop&gt; &lt;PlusExpression&gt;}
+     */
     private static class Expression {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("Expression", "");
@@ -401,6 +465,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Relop&gt; ::= &lt; | &lt;= | &gt; | &gt;= | == | !=
+     */
     private static class Relop {
         public static Token[] getFirst() {
             return new Token[]{
@@ -430,6 +497,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;PlusExpression&gt; ::= &lt;Item&gt; {+ &lt;Item&gt; | - &lt;Item&gt;}
+     */
     private static class PlusExpression {
         public static Token[] getFirst() {
             return Item.getFirst();
@@ -452,6 +522,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Item ::= &lt;Factor&gt; {*&lt;Factor&gt; | /&lt;Factor&gt;}
+     */
     private static class Item {
         public static Token[] getFirst() {
             return Factor.getFirst();
@@ -474,6 +547,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Factor ::= VALUE | '(' &lt;Expression&gt; ')' | &lt;Id&gt; &lt;Call&gt;
+     */
     private static class Factor {
         public static Token[] getFirst() {
             return new Token[]{
@@ -506,6 +582,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;Call ::= '(' &lt;TrueParameterList&gt; ')'
+     */
     private static class Call {
         public static Token[] getFirst() {
             return new Token[]{new Token("(", Token.Type.LEFT_PARENTHESIS)};
@@ -528,6 +607,9 @@ public class SyntacticAnalyze {
         }
     }
 
+    /**
+     * &lt;TrueParameterList&gt; ::= &lt;Expression&gt; {, &lt;Expression&gt;}
+     */
     private static class TrueParameterList {
         public static Token[] getFirst(){
             return Expression.getFirst();
