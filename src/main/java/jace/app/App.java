@@ -1,5 +1,6 @@
 package jace.app;
 
+import jace.app.SyntacticAnalysis.ParseTreeNode;
 import jace.app.SyntacticAnalysis.SyntacticAnalyze;
 import jace.app.Tokenizer.Token;
 import jace.app.Tokenizer.Tokenizer;
@@ -26,7 +27,8 @@ public class App
             System.out.println(e.getMessage());
             return;
         }
-        SyntacticAnalyze.analyze(code);
+        ParseTreeNode root = SyntacticAnalyze.analyze(code);
+        root.show(System.out);
     }
 
     public static String readFile(String filename) throws IOException {

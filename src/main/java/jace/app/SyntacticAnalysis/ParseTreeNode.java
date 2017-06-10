@@ -1,5 +1,6 @@
 package jace.app.SyntacticAnalysis;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +73,46 @@ public class ParseTreeNode {
     public ParseTreeNode(String property, String code){
         this.property = property;
         this.code = code;
+    }
+
+    /**
+     * Show the tree
+     */
+    public void show(PrintStream out){
+        this.show(out, 1, true, new ArrayList<Integer>(), -1);
+    }
+
+    private void show(PrintStream out, int level, boolean last, ArrayList<Integer> count, int parent){
+        StringBuilder prefix;
+        String genPrefix;
+        if(parent == -1){
+            prefix = new StringBuilder("└── ");
+        } else{
+            if (!count.contains(parent))
+                count.add(parent);
+            prefix = new StringBuilder(new String(new char[4 * level]).replace("\0", " "));
+            for(int i : count) prefix.setCharAt(i, '│');
+            if(last){
+                prefix.setCharAt(parent, '└');
+                count.remove(new Integer(parent));
+            } else
+                prefix.setCharAt(parent, '├');
+            for(int i = parent + 1; i < prefix.length() - 1; i++) prefix.setCharAt(i, '─');
+            prefix.setCharAt(prefix.length() - 1, ' ');
+        }
+        genPrefix = prefix.toString();
+        if(this.getCode().equals("")){
+            out.println(genPrefix + this.getProperty());
+        } else {
+            out.println(genPrefix + this.getProperty() + " code: \"" + this.getCode() + "\"");
+        }
+
+        if(this.getChildren().size() > 0){
+            int length = this.getChildren().size();
+            for(int i = 0; i < length - 1; i++){
+                getChildren().get(i).show(out, level + 1, false, count, level * 4);
+            }
+            getChildren().get(length - 1).show(out, level + 1, true, count, level * 4);
+        }
     }
 }
