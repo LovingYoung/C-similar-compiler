@@ -24,6 +24,7 @@ public class SyntacticAnalyze {
             root = Program.process();
         } catch (ParseException e){
             System.out.println(e.getMessage());
+            e.printStackTrace(System.out);
             System.exit(-1);
         }
         return root;
@@ -82,10 +83,10 @@ public class SyntacticAnalyze {
             return new Token[]{new Token("", Token.Type.IDENTIFIER)};
         }
         public static ParseTreeNode process() throws ParseException {
-            ParseTreeNode root = new ParseTreeNode("Id", "");
+            ParseTreeNode root;
             if(tokens.get(0).getType() == Token.Type.IDENTIFIER){
+                root = new ParseTreeNode("IDENTIFIER", tokens.get(0).getContent());
                 tokens.remove(0);
-                root.addChild(new ParseTreeNode("IDENTIFIER", tokens.get(0).getContent()));
             } else {
                 throw new ParseException(tokens.get(0).getContent());
             }
@@ -113,11 +114,11 @@ public class SyntacticAnalyze {
         }
 
         public static ParseTreeNode process() throws ParseException {
-            ParseTreeNode root = new ParseTreeNode("VariablesDeclarative", "");
+            ParseTreeNode root;
             Token token = tokens.get(0);
             tokens.remove(0);
             if(token.equals(new Token(";", Token.Type.FIELD_OP))){
-                root.addChild(new ParseTreeNode("VariablesDeclarative", token.getContent()));
+                root = new ParseTreeNode("FIELD_OP", token.getContent());
             } else {
                 throw new ParseException(token.getContent());
             }
@@ -187,7 +188,6 @@ public class SyntacticAnalyze {
 
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("Parameter", "");
-            root.addChild(Parameter.process());
             Token token = tokens.get(0);
             if(token.equals(new Token("int", Token.Type.KEYWORD))){
                 tokens.remove(0);
@@ -206,6 +206,7 @@ public class SyntacticAnalyze {
         }
 
         public static ParseTreeNode process() throws ParseException {
+            ParseTreeNode root = new ParseTreeNode("StatementBlocks", "");
             if(!tokens.get(0).equals(new Token("{", Token.Type.LEFT_BRACE))){
                 throw new ParseException(tokens.get(0).getContent());
             }
@@ -216,6 +217,7 @@ public class SyntacticAnalyze {
             if(!tokens.get(0).equals(new Token("}", Token.Type.RIGHT_BRACE)))
                 throw new ParseException(tokens.get(0).getContent());
             root.addChild(new ParseTreeNode("RIGHT_BRACE", "}"));
+            tokens.remove(0);
             return root;
         }
     }
@@ -223,14 +225,12 @@ public class SyntacticAnalyze {
     private static class InnerDeclarative {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("InnerDeclarative", "");
-            if(Arrays.asList(InnerVariableDeclarative.getFirst()).contains(tokens.get(0))){
+            while(Arrays.asList(InnerVariableDeclarative.getFirst()).contains(tokens.get(0))){
                 root.addChild(InnerVariableDeclarative.process());
-                while(tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP))){
-                    Token token = tokens.get(0);
-                    tokens.remove(0);
-                    root.addChild(new ParseTreeNode("FILED_OP", token.getContent()));
-                    root.addChild(InnerVariableDeclarative.process());
-                }
+                if(!tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP)))
+                    throw new ParseException(tokens.get(0).getContent());
+                tokens.remove(0);
+                root.addChild(new ParseTreeNode("FIELD_OP", ";"));
             }
             return root;
         }
@@ -253,6 +253,7 @@ public class SyntacticAnalyze {
             if(!tokens.get(0).equals(new Token("int", Token.Type.KEYWORD)))
                 throw new ParseException(tokens.get(0).getContent());
             root.addChild(new ParseTreeNode("KEYWORD", tokens.get(0).getContent()));
+            tokens.remove(0);
             root.addChild(Id.process());
             return root;
         }
@@ -330,6 +331,10 @@ public class SyntacticAnalyze {
             if(Arrays.asList(Expression.getFirst()).contains(tokens.get(0))){
                 root.addChild(Expression.process());
             }
+            if(!tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP)))
+                throw new ParseException(tokens.get(0).getContent());
+            root.addChild(new ParseTreeNode("FIELD_OP", ";"));
+            tokens.remove(0);
             return root;
         }
     }
@@ -367,11 +372,15 @@ public class SyntacticAnalyze {
         public static ParseTreeNode process() throws ParseException {
             ParseTreeNode root = new ParseTreeNode("AssignmentStatement", "");
             root.addChild(Id.process());
-            if(!tokens.get(0).equals(new Token("=", Token.Type.OPERATOR)))
+            if(!tokens.get(0).equals(new Token("=", Token.Type.ASSIGNMENT)))
                 throw new ParseException(tokens.get(0).getContent());
-            root.addChild(new ParseTreeNode("OPERATOR", "="));
+            root.addChild(new ParseTreeNode("ASSIGNMENT", "="));
             tokens.remove(0);
             root.addChild(Expression.process());
+            if(!tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP)))
+                throw new ParseException(tokens.get(0).getContent());
+            root.addChild(new ParseTreeNode("FIELD_OP", ";"));
+            tokens.remove(0);
             return root;
         }
     }
@@ -410,6 +419,7 @@ public class SyntacticAnalyze {
                 String content = token.getContent();
                 if(content.equals("<") || content.equals("<=") || content.equals(">") || content.equals(">=")
                         || content.equals("==") || content.equals("!=")){
+                    tokens.remove(0);
                     return new ParseTreeNode("RELOP", content);
                 } else {
                     throw new ParseException(token.getContent());
@@ -435,6 +445,7 @@ public class SyntacticAnalyze {
                 } else {
                     root.addChild(new ParseTreeNode("OPERATOR", "-"));
                 }
+                tokens.remove(0);
                 root.addChild(Item.process());
             }
             return root;
