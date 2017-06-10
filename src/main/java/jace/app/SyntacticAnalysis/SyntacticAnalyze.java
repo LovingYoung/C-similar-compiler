@@ -1,8 +1,5 @@
 package jace.app.SyntacticAnalysis;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import com.sun.tools.javac.util.ArrayUtils;
-import com.sun.xml.internal.rngom.digested.DDataPattern;
 import jace.app.Tokenizer.Token;
 import jace.app.Tokenizer.Tokenizer;
 
