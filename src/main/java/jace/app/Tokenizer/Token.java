@@ -74,4 +74,12 @@ public class Token {
         this.content = content;
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Token)) return false;
+        Token token = (Token)obj;
+        if(token.getType() == Type.IDENTIFIER || token.getType() == Type.VALUE) return token.getType() == type;
+        return (token.getType() == type && token.getContent().equals(content));
+    }
 }
