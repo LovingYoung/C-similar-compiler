@@ -1,5 +1,6 @@
 package jace.app.SyntacticAnalysis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class ParseTreeNode {
     /**
      * Store the children of the node
      */
-    private List<ParseTreeNode> children;
+    private List<ParseTreeNode> children = new ArrayList<ParseTreeNode>();
 
     /**
      * get Children of the node

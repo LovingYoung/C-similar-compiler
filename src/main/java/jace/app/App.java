@@ -1,5 +1,6 @@
 package jace.app;
 
+import jace.app.SyntacticAnalysis.SyntacticAnalyze;
 import jace.app.Tokenizer.Token;
 import jace.app.Tokenizer.Tokenizer;
 
@@ -25,9 +26,7 @@ public class App
             System.out.println(e.getMessage());
             return;
         }
-
-        Tokenizer tokenizer = new Tokenizer(code);
-        List<Token> tokens = tokenizer.tokenize();
+        SyntacticAnalyze.analyze(code);
     }
 
     public static String readFile(String filename) throws IOException {

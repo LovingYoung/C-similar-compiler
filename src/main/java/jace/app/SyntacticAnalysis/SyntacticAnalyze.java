@@ -17,7 +17,7 @@ public class SyntacticAnalyze {
 
     private static List<Token> tokens;
 
-    private static ParseTreeNode analyze(String code){
+    public static ParseTreeNode analyze(String code){
         tokens = new Tokenizer(code).tokenize();
         ParseTreeNode root = new ParseTreeNode("", "");
         try {
