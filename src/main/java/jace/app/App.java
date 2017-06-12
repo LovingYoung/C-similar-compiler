@@ -27,7 +27,8 @@ public class App
             System.out.println(e.getMessage());
             return;
         }
-        ParseTreeNode root = SyntacticAnalyze.analyze(code);
+        List<Token> tokens = new Tokenizer(code).tokenize();
+        ParseTreeNode root = SyntacticAnalyze.analyze(tokens);
         root.show(System.out);
     }
 
