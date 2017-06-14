@@ -267,10 +267,6 @@ public class SyntacticAnalyze {
             ParseTreeNode root = new ParseTreeNode("InnerDeclarative", "");
             while(Arrays.asList(InnerVariableDeclarative.getFirst()).contains(tokens.get(0))){
                 root.addChild(InnerVariableDeclarative.process());
-                if(!tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP)))
-                    throw new ParseException(tokens.get(0).getContent());
-                tokens.remove(0);
-                root.addChild(new ParseTreeNode("FIELD_OP", ";"));
             }
             return root;
         }
@@ -287,6 +283,10 @@ public class SyntacticAnalyze {
             root.addChild(new ParseTreeNode("KEYWORD", tokens.get(0).getContent()));
             tokens.remove(0);
             root.addChild(Id.process());
+            if(!tokens.get(0).equals(new Token(";", Token.Type.FIELD_OP)))
+                throw new ParseException(tokens.get(0).getContent());
+            tokens.remove(0);
+            root.addChild(new ParseTreeNode("FIELD_OP", ";"));
             return root;
         }
 
