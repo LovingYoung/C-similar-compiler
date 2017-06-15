@@ -1,7 +1,9 @@
 package jace.app.Intermediate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jaceliu on 12/06/2017.
@@ -55,6 +57,7 @@ public class QuaternionTable {
         }
     }
 
+
     @Override
     public String toString() {
         String result = "op\targ1\targ2\tresult\n";
@@ -62,5 +65,27 @@ public class QuaternionTable {
             result += (quaternion.toString() + "\n");
         }
         return result;
+    }
+
+    public int getCountTempVars() {
+        Set<String> strings = new HashSet<String>();
+        for(Quaternion quaternion: quaternionList){
+            String arg1, arg2, result;
+            arg1 = quaternion.getArg1();
+            arg2 = quaternion.getArg2();
+            result = quaternion.getResult();
+            String[] s = new String[]{arg1, arg2, result};
+            for(String a: s){
+                if (a.startsWith("T")){
+                    try{
+                        Integer.parseInt(a.substring(1));
+                        strings.add(a);
+                    } catch (NumberFormatException e){
+                        continue;
+                    }
+                }
+            }
+        }
+        return strings.size();
     }
 }

@@ -107,4 +107,21 @@ public class EntranceTable {
             out.println(entrance.toString());
         }
     }
+
+    /**
+     * Get the size of the table
+     * @return the size of the table
+     */
+    public int size(){
+        return entranceList.size();
+    }
+
+    /**
+     * Fetch one entrance according to the index
+     * @param index the index of the entrance
+     * @return the entrance
+     */
+    public Entrance fetch(int index){
+        return entranceList.get(index);
+    }
 }

@@ -81,4 +81,22 @@ public class SignatureTable {
         }
         return result;
     }
+
+    /**
+     * Get the size of the table
+     * @return the size of the table
+     */
+    public int size(){
+        return signatureList.size();
+    }
+
+    /**
+     * Fetch one signature according to the index
+     * @param index the index of the signature
+     * @return the signature
+     */
+    public Signature fetch(int index){
+        return signatureList.get(index);
+    }
+
 }
