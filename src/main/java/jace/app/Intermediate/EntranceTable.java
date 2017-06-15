@@ -1,8 +1,8 @@
 package jace.app.Intermediate;
 
 import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jaceliu on 12/06/2017.
@@ -12,7 +12,7 @@ public class EntranceTable {
     /**
      * Store the list of entrances
      */
-    private Set<Entrance> entranceSet = new HashSet<Entrance>();
+    private List<Entrance> entranceList = new ArrayList<Entrance>();
 
     public SignatureTable getSignatureTable() {
         return signatureTable;
@@ -30,7 +30,7 @@ public class EntranceTable {
      * @return if found, return the entrance, or return null
      */
     public Entrance findEntrance(String name){
-        for(Entrance entrance : entranceSet){
+        for(Entrance entrance : entranceList){
             if(entrance.getName().equals(name)){
                 return entrance;
             }
@@ -60,7 +60,7 @@ public class EntranceTable {
         if(en != null){
             throw new IntermediateException("Existing entrance: " + entrance.getName());
         }
-        entranceSet.add(entrance);
+        entranceList.add(entrance);
     }
 
     /**
@@ -72,7 +72,7 @@ public class EntranceTable {
         Entrance en = findEntrance(entrance.getName());
         if(en == null)
             throw new IntermediateException("Removing non-existing entrance: " + entrance.getName());
-        entranceSet.remove(entrance);
+        entranceList.remove(entrance);
     }
 
     /**
@@ -84,7 +84,7 @@ public class EntranceTable {
         Entrance entrance = findEntrance(name);
         if(entrance == null)
             throw new IntermediateException("Removing non-existing entrance: " + name);
-        entranceSet.remove(entrance);
+        entranceList.remove(entrance);
     }
 
     /**
@@ -103,7 +103,7 @@ public class EntranceTable {
      * @param out the PrintStream to show
      */
     public void show(PrintStream out){
-        for(Entrance entrance: entranceSet){
+        for(Entrance entrance: entranceList){
             out.println(entrance.toString());
         }
     }

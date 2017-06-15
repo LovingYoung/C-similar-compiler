@@ -1,14 +1,14 @@
 package jace.app.Intermediate;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jaceliu on 12/06/2017.
  */
 public class SignatureTable {
 
-    private Set<Signature> signatureSet = new HashSet<Signature>();
+    private List<Signature> signatureList = new ArrayList<Signature>();
 
     /**
      * Find an signature with specific name
@@ -16,7 +16,7 @@ public class SignatureTable {
      * @return if found, return the signature, or return null
      */
     public Signature findEntrace(String name){
-        for(Signature signature : signatureSet){
+        for(Signature signature : signatureList){
             if(signature.getName().equals(name)){
                 return signature;
             }
@@ -46,7 +46,7 @@ public class SignatureTable {
         if(en != null){
             throw new IntermediateException("Existing signature: " + signature.getName());
         }
-        signatureSet.add(signature);
+        signatureList.add(signature);
     }
 
     /**
@@ -58,7 +58,7 @@ public class SignatureTable {
         Signature en = findEntrace(signature.getName());
         if(en == null)
             throw new IntermediateException("Removing non-existing signature: " + signature.getName());
-        signatureSet.remove(signature);
+        signatureList.remove(signature);
     }
 
     /**
@@ -70,13 +70,13 @@ public class SignatureTable {
         Signature signature = findEntrace(name);
         if(signature == null)
             throw new IntermediateException("Removing non-existing signature: " + name);
-        signatureSet.remove(signature);
+        signatureList.remove(signature);
     }
 
     @Override
     public String toString() {
         String result = "Name\tType\tPara\n";
-        for(Signature signature: signatureSet){
+        for(Signature signature: signatureList){
             result += (signature.toString() + "\n");
         }
         return result;
