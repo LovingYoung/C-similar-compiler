@@ -14,7 +14,6 @@ public class EntranceTable {
      */
     private Set<Entrance> entranceSet = new HashSet<Entrance>();
 
-
     public SignatureTable getSignatureTable() {
         return signatureTable;
     }
@@ -99,6 +98,10 @@ public class EntranceTable {
         return entrance;
     }
 
+    /**
+     * Show the entrance table
+     * @param out the PrintStream to show
+     */
     public void show(PrintStream out){
         for(Entrance entrance: entranceSet){
             out.println(entrance.toString());

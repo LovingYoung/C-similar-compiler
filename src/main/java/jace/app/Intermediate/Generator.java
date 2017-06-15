@@ -230,7 +230,12 @@ public class Generator {
         return Compare(n1, n2, expression.getChildren().get(1).getCode(), quaternions);
     }
 
-
+    /**
+     * Generate quaternions for expressions
+     * @param plusExpression
+     * @param quaternions
+     * @return
+     */
     private static String PlusExpression(ParseTreeNode plusExpression, QuaternionTable quaternions) {
         int size = plusExpression.getChildren().size();
         String n1 = Item(plusExpression.getChildren().get(0), quaternions);

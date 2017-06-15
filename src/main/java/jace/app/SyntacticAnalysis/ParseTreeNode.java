@@ -82,6 +82,14 @@ public class ParseTreeNode {
         this.show(out, 1, true, new ArrayList<Integer>(), -1);
     }
 
+    /**
+     * The inner implementation of showing the tree
+     * @param out the destination of show
+     * @param level current tree level
+     * @param last is this node is the last sibling
+     * @param count the node before
+     * @param parent the parent place
+     */
     private void show(PrintStream out, int level, boolean last, ArrayList<Integer> count, int parent){
         StringBuilder prefix;
         String genPrefix;
