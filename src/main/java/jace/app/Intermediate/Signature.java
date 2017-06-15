@@ -33,9 +33,9 @@ public class Signature{
         this.parameter = parameter;
     }
 
-    String name;
-    Type type;
-    boolean parameter;
+    private String name;
+    private Type type;
+    private boolean parameter;
 
     public Signature(String name, Type type, boolean parameter){
         setName(name);
@@ -51,5 +51,10 @@ public class Signature{
             return false;
         Signature sig = (Signature) obj;
         return sig.getName().equals(this.getName());
+    }
+
+    @Override
+    public String toString() {
+        return getName() + "\t" + getType() + "\t" + isParameter();
     }
 }

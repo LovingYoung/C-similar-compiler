@@ -58,5 +58,10 @@ public class Quaternion {
                 q.result.equals(this.result)
         );
     }
+
+    @Override
+    public String toString() {
+        return op+"\t"+arg1+"\t"+arg2+"\t"+result;
+    }
 }
 

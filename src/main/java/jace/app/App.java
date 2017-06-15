@@ -1,5 +1,7 @@
 package jace.app;
 
+import jace.app.Intermediate.EntranceTable;
+import jace.app.Intermediate.Generator;
 import jace.app.SyntacticAnalysis.ParseTreeNode;
 import jace.app.SyntacticAnalysis.SyntacticAnalyze;
 import jace.app.Tokenizer.Token;
@@ -30,6 +32,9 @@ public class App
         List<Token> tokens = new Tokenizer(code).tokenize();
         ParseTreeNode root = SyntacticAnalyze.analyze(tokens);
         root.show(System.out);
+
+        EntranceTable et = Generator.generate(root);
+        et.show(System.out);
     }
 
     public static String readFile(String filename) throws IOException {

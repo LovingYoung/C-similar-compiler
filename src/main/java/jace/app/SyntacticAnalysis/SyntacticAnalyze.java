@@ -68,7 +68,7 @@ public class SyntacticAnalyze {
                 tokens.remove(0);
                 root.addChild(new ParseTreeNode("KEYWORD", "void"));
                 root.addChild(Id.process());
-                root.addChild(FunctionDeclarative.process());
+                root.addChild(DeclarativeType.process());
             } else{
                 throw new ParseException(tokens.get(0).getContent());
             }

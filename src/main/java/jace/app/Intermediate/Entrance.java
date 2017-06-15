@@ -67,4 +67,11 @@ public class Entrance{
      */
     public Entrance(){
     }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.name + "\n\n"
+                + "Signature Table: \n" + signatureTable.toString()
+                + "\n" + "QuaternionTable: \n" + quaternionTable.toString() + "\n";
+    }
 }

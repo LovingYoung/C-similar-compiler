@@ -54,4 +54,13 @@ public class QuaternionTable {
             quaternionList.add(quaternion);
         }
     }
+
+    @Override
+    public String toString() {
+        String result = "op\targ1\targ2\tresult\n";
+        for(Quaternion quaternion: quaternionList){
+            result += (quaternion.toString() + "\n");
+        }
+        return result;
+    }
 }

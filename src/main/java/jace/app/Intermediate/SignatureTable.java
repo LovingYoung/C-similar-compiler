@@ -73,4 +73,12 @@ public class SignatureTable {
         signatureSet.remove(signature);
     }
 
+    @Override
+    public String toString() {
+        String result = "Name\tType\tPara\n";
+        for(Signature signature: signatureSet){
+            result += (signature.toString() + "\n");
+        }
+        return result;
+    }
 }

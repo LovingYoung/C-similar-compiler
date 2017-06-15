@@ -1,5 +1,6 @@
 package jace.app.Intermediate;
 
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -96,5 +97,11 @@ public class EntranceTable {
         Entrance entrance = new Entrance();
         addEntrance(entrance);
         return entrance;
+    }
+
+    public void show(PrintStream out){
+        for(Entrance entrance: entranceSet){
+            out.println(entrance.toString());
+        }
     }
 }
